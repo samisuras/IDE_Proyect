@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Sistema Medico</title>
+    <!--CSS-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
+
+    <!--BOOTSTRAP-->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/cerulean/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-C++cugH8+Uf86JbNOnQoBweHHAe/wVKN/mb0lTybu/NZ9sEYbd+BbbYtNpWYAsNP" crossorigin="anonymous">
+    <!--FONT AWESOME-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!--ANGULAR JS-->
+    <script src="./lib/angular.js"></script>
+    <script src="./lib/angularRouting.js"></script>
+    <script src="./lib/jquery.js"></script>
+
+</head>
+
+<body ng-controller="indexController">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-7">
+            </div>
+            <!-- content -->
+            <div class="col-xl-5">
+                <div ng-view>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="./lib/jquery/jquery.min.js"></script>
+    <script src="./lib/jquery/jquery-migrate.min.js"></script>
+    <script src="./lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/animate.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="routing.js"></script>
+
+</body>
+
+</html>
