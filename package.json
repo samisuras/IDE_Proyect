@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "electron": "^4.0.0",
-    "electron-reload": "^1.4.0"
+    "electron-reload": "^1.4.0",
+    "line-reader": "^0.4.0",
+    "remote": "^0.2.6"
   }
 }

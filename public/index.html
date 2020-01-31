@@ -21,13 +21,16 @@
     <script src="./lib/angular.js"></script>
     <script src="./lib/angularRouting.js"></script>
     <script src="./lib/jquery.js"></script>
-
+    <script src="pruebas.js"></script>
 </head>
 
 <body ng-controller="indexController">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xl-7">
+            <div class="col-xl-7">   
+                <textarea name="" style="width: 100%; height: 100%;" id="codigo" cols="30" rows="10"></textarea>
+                <button class="btn btn-primary"  onclick="subirArchivo()" id="subir">Subir archivo</button>
+                <button class="btn btn-success"  onclick="guardarArchivo()" id="subir">Guardar</button>
             </div>
             <!-- content -->
             <div class="col-xl-5">
@@ -45,6 +48,7 @@
     <script src="js/animate.js"></script>
     <script src="js/custom.js"></script>
     <script src="routing.js"></script>
+    <script src="pruebas.js"></script>
 
 </body>
 
