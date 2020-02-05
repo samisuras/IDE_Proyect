@@ -7,13 +7,13 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>Sistema Medico</title>
     <!--CSS-->
+    <link href="lib/bootstrap/css/index.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
 
     <!--BOOTSTRAP-->
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/cerulean/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-C++cugH8+Uf86JbNOnQoBweHHAe/wVKN/mb0lTybu/NZ9sEYbd+BbbYtNpWYAsNP" crossorigin="anonymous">
-    <!--FONT AWESOME-->
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/flatly/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-C++cugH8+Uf86JbNOnQoBweHHAe/wVKN/mb0lTybu/NZ9sEYbd+BbbYtNpWYAsNP" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
         integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -24,18 +24,48 @@
     <script src="pruebas.js"></script>
 </head>
 
-<body ng-controller="indexController">
+<body ng-controller="indexController" class="bg-oscuro">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xl-7">   
-                <textarea name="" style="width: 100%; height: 100%;" id="codigo" cols="30" rows="10"></textarea>
-                <button class="btn btn-primary"  onclick="subirArchivo()" id="subir">Subir archivo</button>
-                <button class="btn btn-success"  onclick="guardarArchivo()" id="subir">Guardar</button>
+            <div class="col-xl-7">  
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <button type="button" class="btn btn-primary btn-sm"><a href="">Archivo</a></button>
+                    <div class="btn-group" role="group">
+                      <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <a class="dropdown-item" onclick="subirArchivo()" id="subir">Subir Archivo</a>
+                        <a class="dropdown-item" onclick="guardarArchivo()" id="subir">Guardar</a>
+                      </div>
+                    </div>
+                  </div>
+                <textarea name="" style="width: 100%; height: 100%;" id="codigo" cols="30" rows="23" class="bg-primary text-white border border-white rounded-right"></textarea>
             </div>
             <!-- content -->
-            <div class="col-xl-5">
-                <div ng-view>
-
+            <div class="col-xl-5 text-white">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-primary btn-sm"><a href="#!sintactico">Sintáctico</a></button>
+                    <button type="button" class="btn btn-primary btn-sm"><a href="#!lexico">Léxico</a></button>
+                    <button type="button" class="btn btn-primary btn-sm"><a href="#!semantico">Semántico</a></button>
+                </div>
+                
+                <div ng-view class="bg-primary border border-white rounded-left"  style="width: 100%; height: 100%;">
+                        
+                </div>
+            </div>
+            <div class="col-xl-12 mt-3">
+                <div class="card text-white mb-2" style="width: 100%; height: 100%;">
+                    <div class="card text-white bg-primary" style="width: 100%; height: 100%;">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-secondary btn-sm"><u>PROBLEMAS</u></button>
+                            <button type="button" class="btn btn-secondary btn-sm"><u>SALIDA</u></button>
+                            <button type="button" class="btn btn-secondary btn-sm"><u>TERMINAL</u></button>
+                        </div>
+                        <div class="card-body">
+                          <h4 class="card-title">Errores</h4>
+                          <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel dolor iure et aperiam magni facilis, cumque dolores expedita enim corporis laudantium ullam quidem consequatur at perferendis cum laboriosam rem ab.</p>
+                          <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint quam numquam doloribus exercitationem possimus. Aspernatur nulla voluptatum voluptatibus asperiores facere ex quae repudiandae.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
