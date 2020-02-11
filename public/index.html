@@ -9,6 +9,7 @@
     <!--CSS-->
     <link href="lib/bootstrap/css/index.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
 
     <!--BOOTSTRAP-->
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -37,8 +38,15 @@
                         <a class="dropdown-item" onclick="guardarArchivo()" id="subir">Guardar</a>
                       </div>
                     </div>
-                  </div>
-                <textarea name="" style="width: 100%; height: 100%;" id="codigo" cols="30" rows="23" class="bg-primary text-white border border-white rounded-right"></textarea>
+                </div>
+                <button class="btn-group" onclick="pintar()">Pintar</button>
+                <div id="toolbar">
+                    <button class="ql-bold">Bold</button>
+                    <button class="ql-italic">Italic</button>
+                </div>
+                <div id="editor" style="color: aliceblue; height: 20rem;">
+                
+                </div>
             </div>
             <!-- content -->
             <div class="col-xl-5 text-white">
@@ -79,7 +87,7 @@
     <script src="js/custom.js"></script>
     <script src="routing.js"></script>
     <script src="pruebas.js"></script>
-
+    <script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
 </body>
 
 </html>
