@@ -87,7 +87,7 @@ pintar = ()=>{
     let palabra = ""
     //delimitador
     for (let i = 0; i < infoCodigo.length; i++) {
-        if(infoCodigo[i] == " " || infoCodigo[i] == "\n"){
+        if(infoCodigo[i] == " " || infoCodigo[i] == "\n" || infoCodigo[i] == "{" || infoCodigo[i] == "(" || infoCodigo[i] == ")" || infoCodigo[i] == "}"){
             palabra = palabra.trim();
             if(palabrasReservadas.has(palabra)){
                 console.log(palabrasReservadas.has(palabra));
@@ -108,4 +108,3 @@ pinta = (posicion,palabra,color) =>{
     });
 
 }
-
