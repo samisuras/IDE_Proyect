@@ -1,5 +1,7 @@
 const appi = require('electron').remote; 
 const fs = require("fs");
+const path = require("path")
+const { exec } = require("child_process")
 //Hash map de palabras reservadas
 const palabrasReservadas = require('d3-collection').map();
 palabrasReservadas
@@ -40,7 +42,7 @@ ed.onkeyup = (e)=>{
 document.onkeyup = function(e) {
     
     if (e.ctrlKey && e.which == 83) {
-        guardarArchivo()
+        guardarArchivo(true)
     }
   };
 
@@ -65,7 +67,7 @@ readFile = async (filepath)=>{
     pintar()
 }
 
-guardarArchivo = ()=>{
+guardarArchivo = (alerta)=>{
     if(filepathG == ""){
         alert("No se ha abierto ningun archivo");
     }else{
@@ -77,7 +79,8 @@ guardarArchivo = ()=>{
                 return;
             }
         })
-        alert("Archivo guardado con exito")
+        if(alerta)
+            alert("Archivo guardado con exito")
     }
 }
 
@@ -107,4 +110,25 @@ pinta = (posicion,palabra,color) =>{
         'color': `${color}`
     });
 
+}
+
+compilar = () => {
+    guardarArchivo(false)
+    archivo = path.join(__dirname,"components","go","temp.go");
+    
+    exec(`go run ${filepathG}`, (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            alert(error.message)
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            alert(stderr)
+            return;
+        }
+        console.log(stdout);
+        const salida = document.getElementById("salida");
+        salida.innerHTML = stdout;
+    })
 }

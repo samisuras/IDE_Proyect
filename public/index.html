@@ -10,6 +10,7 @@
     <link href="lib/bootstrap/css/index.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="./components/salida/salida.css">
 
     <!--BOOTSTRAP-->
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -26,7 +27,7 @@
 </head>
 
 <body ng-controller="indexController" class="bg-oscuro">
-    <div class="container-fluid">
+    <div class="container-fluid mt-3">
         <div class="row">
             <div class="col-xl-7">  
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
@@ -38,6 +39,7 @@
                         <a class="dropdown-item" onclick="guardarArchivo()" id="subir">Guardar</a>
                       </div>
                     </div>
+                    <button type="button" onclick="compilar()" class="btn btn-success btn-sm ml-5">Compilar</button>
                 </div>
                 <div id="editor" style="color: aliceblue; height: 20rem;">
                 
@@ -64,9 +66,8 @@
                             <button type="button" class="btn btn-secondary btn-sm"><u>TERMINAL</u></button>
                         </div>
                         <div class="card-body">
-                          <h4 class="card-title">Errores</h4>
-                          <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel dolor iure et aperiam magni facilis, cumque dolores expedita enim corporis laudantium ullam quidem consequatur at perferendis cum laboriosam rem ab.</p>
-                          <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint quam numquam doloribus exercitationem possimus. Aspernatur nulla voluptatum voluptatibus asperiores facere ex quae repudiandae.</p>
+                          <h4 class="card-title">Salida</h4>
+                          <pre id="salida" class="card-text"></pre>
                         </div>
                     </div>
                 </div>
