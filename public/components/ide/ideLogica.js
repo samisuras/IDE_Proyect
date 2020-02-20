@@ -107,7 +107,7 @@ pinta = (posicion,palabra,color) =>{
     
     editor.formatText(posicion-palabra.length, palabra.length, {
         'bold': true,
-        'color': `${color}`
+        'color': color
     });
 
 }
