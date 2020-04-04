@@ -114,7 +114,6 @@ pinta = (posicion,palabra,color) =>{
 
 compilar = () => {
     guardarArchivo(false)
-    archivo = path.join(__dirname,"components","go","temp.go");
     
     exec(`go run ${filepathG}`, (error, stdout, stderr) => {
         if (error) {
