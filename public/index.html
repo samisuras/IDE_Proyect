@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" ng-app="app">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,8 +14,7 @@
 
     <!--BOOTSTRAP-->
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/flatly/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-C++cugH8+Uf86JbNOnQoBweHHAe/wVKN/mb0lTybu/NZ9sEYbd+BbbYtNpWYAsNP" crossorigin="anonymous">
+    
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
         integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -25,7 +24,7 @@
     <script src="./lib/jquery.js"></script>
 </head>
 
-<body ng-controller="indexController" class="bg-oscuro">
+<body class="bg-oscuro">
     <div class="container-fluid mt-3">
         <div class="row">
             <div class="col-xl-7">  
@@ -38,7 +37,7 @@
                         <a class="dropdown-item" onclick="guardarArchivo()" id="subir">Guardar</a>
                       </div>
                     </div>
-                    <button type="button" onclick="compilar()" class="btn btn-success btn-sm ml-5">Compilar</button>
+                    <button type="button" onclick="compilar()" ng-click="prueba" class="btn btn-success btn-sm ml-5">Compilar</button>
                 </div>
                 <div id="editor" style="color: aliceblue; height: 30rem; font-size:2vw;">
                 
@@ -46,14 +45,53 @@
             </div>
             <!-- content -->
             <div class="col-xl-5 text-white">
-                <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-primary btn-sm"><a href="#!sintactico">Sintáctico</a></button>
-                    <button type="button" class="btn btn-primary btn-sm"><a href="#!lexico">Léxico</a></button>
-                    <button type="button" class="btn btn-primary btn-sm"><a href="#!semantico">Semántico</a></button>
-                </div>
-                
-                <div ng-view class="bg-primary border border-white rounded-left"  style="width: 100%; height: 100%;">
-                        
+                <div class="bg-primary border border-white rounded-left"  style="width: 100%; height: 100%;">
+                    <h1 class="h1 m-1">Léxico</h1>
+                    <div class="container">
+                        <table class="table text-white table-bordered text-center">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th scope="col" class="text-info" >Reservadas</th>
+                                <th scope="col" class="text-info">Identificadores</th>
+                                <th scope="col" class="text-info">Números</th>
+                                <th scope="col" class="text-info">Operadores</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td id="reservadas">-</td>
+                                <td id="identificadores">-</td>
+                                <td id="numeros">-</td>
+                                <td id="operadores">-</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <table class="table text-white table-bordered text-center">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th scope="col" class="text-info">Terminadores</th>
+                                <th scope="col" class="text-info">Comparadores</th>
+                                <th scope="col" class="text-info">Delimitadores</th>
+                                <th scope="col" class="text-info">Asignación</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td id="terminadores">-</td>
+                                <td id="comparadores">-</td>
+                                <td id="delimitadores">-</td>
+                                <td id="asignacion">-</td>
+                              </tr>
+                    
+                            </tbody>
+                          </table>
+                    </div>
+                    <div class="container">
+                        <h1 class="h1 m-1">Sintáctico</h1>
+                    </div>
+                    <div class="container">
+                        <h1 class="h1 m-1">Semántico</h1>
+                    </div>
                 </div>
             </div>
             <div class="col-xl-12 mt-3">
@@ -78,9 +116,6 @@
     <script src="./lib/jquery/jquery.min.js"></script>
     <script src="./lib/jquery/jquery-migrate.min.js"></script>
     <script src="./lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="js/animate.js"></script>
-    <script src="js/custom.js"></script>
-    <script src="routing.js"></script>
     <script src="./components/ide/ideLogica.js"></script>
     <script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
 </body>
