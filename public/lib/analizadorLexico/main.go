@@ -37,7 +37,7 @@ var indexDeAsignacion int = 0
 var tokensDeComparacion [maximo]string
 var indexDeComparacion int = 0
 
-var palabrasReservadas = []string{"int", "cout", "cin", "main", "using", "namespace", "std", "endl", "return", "include", "iostream"}
+var palabrasReservadas = []string{"program", "if", "else", "fi", "do", "until", "while", "read", "write", "float", "int", "bool", "not", "and", "or"}
 
 func numeroLineas(codigo string) int {
 	var num int = 0
