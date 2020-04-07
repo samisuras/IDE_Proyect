@@ -63,7 +63,7 @@ readFile = async (filepath)=>{
     editor.deleteText(0,editor.getLength())
     var lines = await require('fs').readFileSync(filepath, 'utf-8');
     editor.insertText(0,lines);
-    console.log(lines);
+    //console.log(lines);
     pintar()
 }
 
@@ -93,13 +93,13 @@ pintar = ()=>{
         if(infoCodigo[i] == " " || infoCodigo[i] == "\n" || infoCodigo[i] == "{" || infoCodigo[i] == "(" || infoCodigo[i] == ")" || infoCodigo[i] == "}"){
             palabra = palabra.trim();
             if(palabrasReservadas.has(palabra)){
-                console.log(palabrasReservadas.has(palabra));
+                //console.log(palabrasReservadas.has(palabra));
                 pinta(i,palabra,palabrasReservadas.get(palabra))
             }
             palabra = ""
         }
         palabra += infoCodigo[i];
-        console.log(palabra);
+        //console.log(palabra);
     }
 }
 //pinta la palabra segun la posicion
@@ -114,8 +114,9 @@ pinta = (posicion,palabra,color) =>{
 
 compilar = () => {
     guardarArchivo(false)
-    
-    exec(`go run ${filepathG}`, (error, stdout, stderr) => {
+    let codigo = filtrar()
+    let comando = "go run ./public/lib/analizadorLexico/main.go "+codigo
+    exec(comando, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             alert(error.message)
@@ -126,8 +127,42 @@ compilar = () => {
             alert(stderr)
             return;
         }
-        console.log(stdout);
-        const salida = document.getElementById("salida");
-        salida.innerHTML = stdout;
+        lexico(stdout)
     })
+}
+
+lexico = (salida) => {
+    var arrayTokens = salida.split('|')
+    tokens = {
+        "RESERVADAS":arrayTokens[0],
+        "IDENTIFICADORES":arrayTokens[1],
+        "NUMEROS":arrayTokens[2],
+        "OPERADORES":arrayTokens[3],
+        "TERMINADORES":arrayTokens[4],
+        "COMPARADORES":arrayTokens[5],
+        "DELIMITADORES":arrayTokens[6],
+        "ASIGNACION":arrayTokens[7]
+    }
+    document.getElementById('reservadas').innerHTML = tokens.RESERVADAS
+    document.getElementById('identificadores').innerHTML = tokens.IDENTIFICADORES
+    document.getElementById('numeros').innerHTML = tokens.NUMEROS
+    document.getElementById('operadores').innerHTML = tokens.OPERADORES
+    document.getElementById('terminadores').innerHTML = tokens.TERMINADORES
+    document.getElementById('comparadores').innerHTML = tokens.COMPARADORES
+    document.getElementById('delimitadores').innerHTML = tokens.DELIMITADORES
+    document.getElementById('asignacion').innerHTML = tokens.ASIGNACION
+}
+
+filtrar = () =>{
+    var file = ""
+    for (let i = 0; i<filepathG.length; i++){
+        if(filepathG[i].charCodeAt() == 92){
+            file = file + " "
+        }
+        else{
+            file = file + filepathG[i]
+        }
+    }
+    return file
+
 }
