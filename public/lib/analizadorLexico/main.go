@@ -3,8 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -38,6 +40,21 @@ var tokensDeComparacion [maximo]string
 var indexDeComparacion int = 0
 
 var palabrasReservadas = []string{"program", "if", "else", "fi", "do", "until", "while", "read", "write", "float", "int", "bool", "not", "and", "or"}
+
+func guardarToken(nombre string, tipo string, linea string) {
+	cadena := []byte(nombre + "|" + tipo + "|" + linea + "\n")
+
+	content, err := ioutil.ReadFile("./public/lib/analizadorLexico/tokens.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	content = append(content, cadena...)
+	err = ioutil.WriteFile("./public/lib/analizadorLexico/tokens.txt", content, 0644)
+	if err != nil {
+		panic(err)
+	}
+}
 
 func numeroLineas(codigo string) int {
 	var num int = 0
@@ -75,7 +92,7 @@ func extraerLineas(TAM int, codigo string) []string {
 	return lineas
 
 }
-func formarTokens(entrada string) {
+func formarTokens(entrada string, linea int) {
 	i := 0
 	var palabra string
 	for i < len(entrada) {
@@ -85,7 +102,7 @@ func formarTokens(entrada string) {
 				(entrada[i] == 35) || (entrada[i] == 60) || (entrada[i] == 62) || (entrada[i] == 61) ||
 				(entrada[i] == 123) || (entrada[i] == 125) {
 
-				clasificarSimbolo(entrada[i])
+				clasificarSimbolo(entrada[i], linea)
 
 			} else {
 				palabra = palabra + string(entrada[i])
@@ -94,14 +111,17 @@ func formarTokens(entrada string) {
 
 			if verificarReservada(palabra) == true {
 				//fmt.Println(palabra + " es RESERVADA")
+				guardarToken(palabra, "reservada", strconv.Itoa(linea))
 				tokensDeReservadas[indexTokensDeReservadas] = palabra
 				indexTokensDeReservadas = indexTokensDeReservadas + 1
 			} else if verificarIdentificador(palabra) == true {
 				//fmt.Println(palabra + " es un IDENTIFICADOR")
+				guardarToken(palabra, "identificador", strconv.Itoa(linea))
 				tokensDeIdentificadores[indexTokensDeIdentificadores] = palabra
 				indexTokensDeIdentificadores = indexTokensDeIdentificadores + 1
 			} else if verificarNumero(palabra) == true {
 				//fmt.Println(palabra + " es un NUMERO")
+				guardarToken(palabra, "numero", strconv.Itoa(linea))
 				tokensDeNumeros[indexTokensDeNumeros] = palabra
 				indexTokensDeNumeros = indexTokensDeNumeros + 1
 
@@ -219,7 +239,7 @@ func esDigito(caracter byte) bool {
 }
 func extraerTokenSimbolo(lineas []string) {
 	for i := 0; i < len(lineas); i++ {
-		formarTokens(string(lineas[i]))
+		formarTokens(string(lineas[i]), i+1)
 	}
 }
 
@@ -291,23 +311,28 @@ func imprimirTokens() {
 	}
 }
 
-func clasificarSimbolo(simbolo byte) {
+func clasificarSimbolo(simbolo byte, linea int) {
 
 	if simbolo == 42 || simbolo == 43 || simbolo == 45 || simbolo == 47 || simbolo == 246 || simbolo == 94 { //operador
 		tokensDeOperador[indexTokensOperador] = string(simbolo)
 		indexTokensOperador++
+		guardarToken(string(simbolo), "operador", strconv.Itoa(linea))
 	} else if simbolo == 40 || simbolo == 41 || simbolo == 91 || simbolo == 93 || simbolo == 125 { //Delimitadores
 		tokensDelimitadores[indexDelimitadores] = string(simbolo)
 		indexDelimitadores++
+		guardarToken(string(simbolo), "delimitador", strconv.Itoa(linea))
 	} else if simbolo == 59 { //Terminadores
 		tokensDeTerminador[indexDeTerminador] = string(simbolo)
 		indexDeTerminador++
+		guardarToken(string(simbolo), "terminador", strconv.Itoa(linea))
 	} else if simbolo == 61 { //Asignacion
 		tokensDeAsignacion[indexDeAsignacion] = string(simbolo)
 		indexDeAsignacion++
+		guardarToken(string(simbolo), "asignacion", strconv.Itoa(linea))
 	} else if simbolo == 60 || simbolo == 61 || simbolo == 62 { //Comparacion
 		tokensDeComparacion[indexDeComparacion] = string(simbolo)
 		indexDeComparacion++
+		guardarToken(string(simbolo), "comparacion", strconv.Itoa(linea))
 	}
 }
 

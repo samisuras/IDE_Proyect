@@ -143,6 +143,7 @@ lexico = (salida) => {
         "DELIMITADORES":arrayTokens[6],
         "ASIGNACION":arrayTokens[7]
     }
+    console.log(tokens)
     document.getElementById('reservadas').innerHTML = tokens.RESERVADAS
     document.getElementById('identificadores').innerHTML = tokens.IDENTIFICADORES
     document.getElementById('numeros').innerHTML = tokens.NUMEROS
