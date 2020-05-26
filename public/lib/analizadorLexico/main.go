@@ -349,7 +349,42 @@ func archivo(arguments []string) string {
 	}
 	return file
 }
+
+func eliminarArchivo() {
+	var path = "./public/lib/analizadorLexico/tokens.txt"
+	var _, err = os.Stat(path)
+
+	if os.IsNotExist(err) {
+		//fmt.Printf("Error el archivo no existe: %v\n", err)
+	} else {
+		err := os.Remove(path)
+		if err != nil {
+			//fmt.Printf("Error eliminando archivo: %v\n", err)
+		} else {
+			//fmt.Println("Eliminado correctamente")
+		}
+	}
+	return
+}
+
+func crearArchivo() {
+	var path = "./public/lib/analizadorLexico/tokens.txt"
+	//Verifica que el archivo existe
+	var _, err = os.Stat(path)
+	//Crea el archivo si no existe
+	if os.IsNotExist(err) {
+		var file, err = os.Create(path)
+		if err != nil {
+			return
+		}
+		defer file.Close()
+	}
+	//fmt.Println("Archivo creado", path)
+}
+
 func main() {
+	eliminarArchivo()
+	crearArchivo()
 	file := archivo(os.Args[1:])
 	tam := numeroLineas(file)
 	lineas := extraerLineas(tam, file)
