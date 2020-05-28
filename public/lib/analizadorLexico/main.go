@@ -246,6 +246,9 @@ func extraerTokenSimbolo(lineas []string) {
 func imprimirTokens() {
 
 	//fmt.Print("Reservadas ")
+	if indexTokensDeReservadas == 0 {
+		fmt.Println("no se encontraron|")
+	}
 	for i := 0; i < indexTokensDeReservadas; i++ {
 		if i == (indexTokensDeReservadas - 1) {
 			fmt.Print(string(tokensDeReservadas[i]) + "|")
@@ -254,6 +257,9 @@ func imprimirTokens() {
 		}
 	}
 	//fmt.Print("Identificadores ")
+	if indexTokensDeIdentificadores == 0 {
+		fmt.Println("no se encontraron|")
+	}
 	for i := 0; i < indexTokensDeIdentificadores; i++ {
 		if i == (indexTokensDeIdentificadores - 1) {
 			fmt.Print(string(tokensDeIdentificadores[i]) + "|")
@@ -262,6 +268,9 @@ func imprimirTokens() {
 		}
 	}
 	//fmt.Print("Números ")
+	if indexTokensDeNumeros == 0 {
+		fmt.Println("no se encontraron|")
+	}
 	for i := 0; i < indexTokensDeNumeros; i++ {
 		if i == (indexTokensDeNumeros - 1) {
 			fmt.Print(string(tokensDeNumeros[i]) + "|")
@@ -270,6 +279,9 @@ func imprimirTokens() {
 		}
 	}
 	//fmt.Print("Operadores ")
+	if indexTokensOperador == 0 {
+		fmt.Println("no se encontraron|")
+	}
 	for i := 0; i < indexTokensOperador; i++ {
 		if i == (indexTokensOperador - 1) {
 			fmt.Print(string(tokensDeOperador[i]) + "|")
@@ -278,6 +290,9 @@ func imprimirTokens() {
 		}
 	}
 	//fmt.Print("Terminadores ")
+	if indexDeTerminador == 0 {
+		fmt.Println("no se encontraron|")
+	}
 	for i := 0; i < indexDeTerminador; i++ {
 		if i == (indexDeTerminador - 1) {
 			fmt.Print(string(tokensDeTerminador[i]) + "|")
@@ -286,6 +301,9 @@ func imprimirTokens() {
 		}
 	}
 	//fmt.Print("Comparadores ")
+	if indexDeComparacion == 0 {
+		fmt.Println("no se encontraron|")
+	}
 	for i := 0; i < indexDeComparacion; i++ {
 		if i == (indexDeComparacion - 1) {
 			fmt.Print(string(tokensDeComparacion[i]) + "|")
@@ -294,6 +312,9 @@ func imprimirTokens() {
 		}
 	}
 	//fmt.Print("Delimitadores ")
+	if indexDelimitadores == 0 {
+		fmt.Println("no se encontraron|")
+	}
 	for i := 0; i < indexDelimitadores; i++ {
 		if i == (indexDelimitadores - 1) {
 			fmt.Print(string(tokensDelimitadores[i]) + "|")
@@ -302,6 +323,9 @@ func imprimirTokens() {
 		}
 	}
 	//fmt.Print("Asignación ")
+	if indexDeAsignacion == 0 {
+		fmt.Println("no se encontraron|")
+	}
 	for i := 0; i < indexDeAsignacion; i++ {
 		if i == (indexDeAsignacion - 1) {
 			fmt.Print(string(tokensDeAsignacion[i]) + "|")
@@ -313,29 +337,78 @@ func imprimirTokens() {
 
 func clasificarSimbolo(simbolo byte, linea int) {
 
-	if simbolo == 42 || simbolo == 43 || simbolo == 45 || simbolo == 47 || simbolo == 246 || simbolo == 94 { //operador
+	if simbolo == 42 || simbolo == 43 || simbolo == 45 || simbolo == 47 || simbolo == 94 { //operador
 		tokensDeOperador[indexTokensOperador] = string(simbolo)
 		indexTokensOperador++
-		guardarToken(string(simbolo), "operador", strconv.Itoa(linea))
 	} else if simbolo == 40 || simbolo == 41 || simbolo == 91 || simbolo == 93 || simbolo == 125 { //Delimitadores
 		tokensDelimitadores[indexDelimitadores] = string(simbolo)
 		indexDelimitadores++
-		guardarToken(string(simbolo), "delimitador", strconv.Itoa(linea))
 	} else if simbolo == 59 { //Terminadores
 		tokensDeTerminador[indexDeTerminador] = string(simbolo)
 		indexDeTerminador++
-		guardarToken(string(simbolo), "terminador", strconv.Itoa(linea))
 	} else if simbolo == 61 { //Asignacion
 		tokensDeAsignacion[indexDeAsignacion] = string(simbolo)
 		indexDeAsignacion++
-		guardarToken(string(simbolo), "asignacion", strconv.Itoa(linea))
 	} else if simbolo == 60 || simbolo == 61 || simbolo == 62 { //Comparacion
 		tokensDeComparacion[indexDeComparacion] = string(simbolo)
 		indexDeComparacion++
-		guardarToken(string(simbolo), "comparacion", strconv.Itoa(linea))
 	}
+	setNombreSimbolo(simbolo, linea)
 }
+func setNombreSimbolo(simbolo byte, linea int) {
 
+	switch simbolo {
+	case 42:
+		guardarToken(string(simbolo), "multOp", strconv.Itoa(linea))
+		break
+	case 43:
+		guardarToken(string(simbolo), "sumaOp", strconv.Itoa(linea))
+		break
+	case 45:
+		guardarToken(string(simbolo), "restaOp", strconv.Itoa(linea))
+		break
+	case 47:
+		guardarToken(string(simbolo), "diviOp", strconv.Itoa(linea))
+		break
+	case 94:
+		guardarToken(string(simbolo), "potenOp", strconv.Itoa(linea))
+		break
+	case 40:
+		guardarToken(string(simbolo), "parenAbre", strconv.Itoa(linea))
+		break
+	case 41:
+		guardarToken(string(simbolo), "parenCierra", strconv.Itoa(linea))
+		break
+	case 91:
+		guardarToken(string(simbolo), "corAbre", strconv.Itoa(linea))
+		break
+	case 93:
+		guardarToken(string(simbolo), "corCierra", strconv.Itoa(linea))
+		break
+	case 125:
+		guardarToken(string(simbolo), "llaveCierra", strconv.Itoa(linea))
+		break
+	case 123:
+		guardarToken(string(simbolo), "llaveAbre", strconv.Itoa(linea))
+		break
+	case 59:
+		guardarToken(string(simbolo), "puntoComa", strconv.Itoa(linea))
+		break
+	case 61:
+		guardarToken(string(simbolo), "igual", strconv.Itoa(linea))
+		break
+	case 60:
+		guardarToken(string(simbolo), "menor", strconv.Itoa(linea))
+		break
+	case 62:
+		guardarToken(string(simbolo), "mayor", strconv.Itoa(linea))
+		break
+	default:
+		guardarToken(string(simbolo), "DESCONOCIDO", strconv.Itoa(linea))
+		break
+	}
+
+}
 func archivo(arguments []string) string {
 	file := ""
 

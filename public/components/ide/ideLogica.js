@@ -132,6 +132,7 @@ compilar = () => {
 }
 
 lexico = (salida) => {
+    console.log(salida)
     var arrayTokens = salida.split('|')
     tokens = {
         "RESERVADAS":arrayTokens[0],
