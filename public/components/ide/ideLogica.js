@@ -127,6 +127,7 @@ compilar = () => {
             alert(stderr)
             return;
         }
+        console.log(stdout)
         lexico(stdout)
     })
 }

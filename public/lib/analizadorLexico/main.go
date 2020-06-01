@@ -96,7 +96,7 @@ func formarTokens(entrada string, linea int) {
 	i := 0
 	var palabra string
 	for i < len(entrada) {
-		if entrada[i] != 32 && entrada[i] != 44 && entrada[i] != 10 {
+		if entrada[i] != 32 && entrada[i] != 44 && entrada[i] != 10 && entrada[i] != 59 {
 			if (entrada[i] == 59) || (entrada[i] == 34) || (entrada[i] == 40) || (entrada[i] == 41) ||
 				(entrada[i] == 43) || (entrada[i] == 45) || (entrada[i] == 42) || (entrada[i] == 47) ||
 				(entrada[i] == 35) || (entrada[i] == 60) || (entrada[i] == 62) || (entrada[i] == 61) ||
@@ -125,6 +125,9 @@ func formarTokens(entrada string, linea int) {
 				tokensDeNumeros[indexTokensDeNumeros] = palabra
 				indexTokensDeNumeros = indexTokensDeNumeros + 1
 
+			}
+			if entrada[i] == 59 {
+				clasificarSimbolo(entrada[i], linea)
 			}
 			palabra = ""
 		}
