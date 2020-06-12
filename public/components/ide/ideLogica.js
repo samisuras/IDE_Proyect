@@ -118,6 +118,20 @@ compilar = () => {
     guardarArchivo(false)
     let codigo = filtrar()
     let comando = "go run ./public/lib/analizadorLexico/main.go "+codigo
+    exec('node ./public/tests/tree', (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            alert(error.message)
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            alert(stderr)
+            return;
+        }
+        document.getElementById('arbolito').innerHTML = stdout
+        console.log(stdout)
+    })
     exec(comando, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
