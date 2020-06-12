@@ -1,7 +1,9 @@
 const appi = require('electron').remote; 
 const fs = require("fs");
 const path = require("path")
-const { exec } = require("child_process")
+const { exec } = require("child_process");
+const { promises } = require('dns');
+
 //Hash map de palabras reservadas
 const palabrasReservadas = require('d3-collection').map();
 palabrasReservadas
@@ -24,7 +26,7 @@ palabrasReservadas
 const dialog = appi.dialog;
 var filepathG = "";
 var editor
-
+var exec2 = require('child_process').exec;
 window.onload = () => {
     editor = new Quill('#editor', {
         theme: 'snow'
@@ -127,13 +129,40 @@ compilar = () => {
             alert(stderr)
             return;
         }
-        console.log(stdout)
+        //console.log(stdout)
         lexico(stdout)
+        sintactico()
     })
 }
+sintactico = () =>{
+    var command = "start ./public/lib/analizadorLexico/analizador.exe "+filepathG +" > ./public/lib/analizadorLexico/salida.txt";
+
+    runit(command, 1000).then(function(data){
+        console.log("success: ", data);
+    }, function(err){
+        console.log("fail: ",err);
+    });
+}
+function runit(command, timeout){
+
+    return new Promise(function(resolve, reject){
+        var ch = exec2(command, function(error, stdout, stderr){
+            if(error){
+                reject(error);
+            } else{
+                resolve("program exited without an error");
+            }
+        });
+        setTimeout(function(){
+            resolve("program still running");
+        }, timeout)
+    });
+}
+
+
 
 lexico = (salida) => {
-    console.log(salida)
+    //console.log(salida)
     var arrayTokens = salida.split('|')
     tokens = {
         "RESERVADAS":arrayTokens[0],
@@ -145,7 +174,7 @@ lexico = (salida) => {
         "DELIMITADORES":arrayTokens[6],
         "ASIGNACION":arrayTokens[7]
     }
-    console.log(tokens)
+   //console.log(tokens)
     document.getElementById('reservadas').innerHTML = tokens.RESERVADAS
     document.getElementById('identificadores').innerHTML = tokens.IDENTIFICADORES
     document.getElementById('numeros').innerHTML = tokens.NUMEROS
