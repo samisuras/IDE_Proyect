@@ -1,15 +1,6 @@
-program|reservada|1
 {|llaveAbre|1
+program|reservada|1
 int|reservada|2
 x|identificador|2
-y|identificador|2
 ;|puntoComa|2
-write|reservada|3
-x|identificador|3
-;|puntoComa|3
-write|reservada|4
-y|identificador|4
-;|puntoComa|4
-323|numero|5
-;|puntoComa|5
-}|llaveCierra|6
+}|llaveCierra|3

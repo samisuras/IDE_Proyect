@@ -90,9 +90,14 @@ guardarArchivo = (alerta)=>{
 pintar = ()=>{
     const infoCodigo = editor.getText(0,editor.getLength());
     let palabra = ""
-    //delimitador
+    //delimitador de linea
+    //linea = 0;
     for (let i = 0; i < infoCodigo.length; i++) {
         if(infoCodigo[i] == " " || infoCodigo[i] == "\n" || infoCodigo[i] == "{" || infoCodigo[i] == "(" || infoCodigo[i] == ")" || infoCodigo[i] == "}"){
+            //Checa si es nueva linea para incrementar contador
+            /*if(infoCodigo[i] == "\n"){
+                linea++
+            }*/
             palabra = palabra.trim();
             if(palabrasReservadas.has(palabra)){
                 //console.log(palabrasReservadas.has(palabra));

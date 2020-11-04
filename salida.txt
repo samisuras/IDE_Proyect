@@ -1,1 +1,4 @@
-Error sintáctico en la línea 5
+program{
+int x;
+}
+
