@@ -1,0 +1,8 @@
+program {  
+	int x,y;
+	float z;
+	int x;
+	x=10;
+	y=juan;
+}
+ 
