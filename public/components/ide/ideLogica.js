@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path")
 const { exec } = require("child_process");
 const { promises } = require('dns');
+const { table } = require('console');
 
 //Hash map de palabras reservadas
 const palabrasReservadas = require('d3-collection').map();
@@ -28,8 +29,10 @@ var filepathG = "";
 var editor
 var ts = [];
 var asig = [];
-var tablaSimbolos = []
+var tablaSimbolos = [];
+var v = []
 var exec2 = require('child_process').exec;
+
 window.onload = () => {
     editor = new Quill('#editor', {
         theme: 'snow'
@@ -209,6 +212,11 @@ lexico = (salida) => {
     tabla()
     generarTabla()
     datos()
+    resolver()
+    //console.log(tablaSimbolos)
+    console.log(v)
+
+
 }
 
 filtrar = () => {
@@ -428,14 +436,17 @@ buscarEnTabla = (id, expresion) => {
         for (let i = 0; i < simbolos.length; i++) {
             data.push(simbolos[i].split(','))
         }
+
         for (let i = 0; i < data.length; i++) {
             if (data[i][2] == id) {
+                //console.log(data[i][2]," = ",id)
                 bandera = true;
                 pos = i;
                 break;
             }
         }
         if (bandera == true) {
+            expresion = expresion.trim();
             switch (data[pos][0]) {
                 case 'int':
                     if (parseInt(expresion) > 0 || parseInt(expresion) < 0) {
@@ -446,12 +457,11 @@ buscarEnTabla = (id, expresion) => {
                     }
                     break;
                 case 'float':
-                    console.log(parseFloat(expresion))
-                    if(isNaN(parseFloat(expresion)) == true){
+                    if (isNaN(parseFloat(expresion)) == true) {
                         document.getElementById('salida').innerHTML = "Se esperaba un tipo float";
 
                     }
-                    else{
+                    else {
                         actualizarTabla(id, expresion)
 
                     }
@@ -485,22 +495,239 @@ actualizarTabla = (id, expresion) => {
         for (let i = 0; i < partes.length; i++) {
             aux = partes[i].split(',');
             if (aux[2] == id) {
+                expresion = expresion.replace(/\s+/g, ' ');
                 cadena = aux[0] + ',' + aux[1] + ',' + aux[2] + ',' + aux[3] + '|';
                 var texto = aux[0] + ',' + aux[1] + ',' + aux[2] + ',' + expresion;
-                console.log("sustituir " + cadena)
-                console.log("por " + texto)
                 actualizarArchivo(cadena.toString(), texto.toString())
             }
         }
     });
 }
-
 actualizarArchivo = (cadena, texto) => {
+    var aux = texto.split(',');
+    var expresion = aux[3] + " ";
+    var termino = "";
+    var tipo = aux[0];
+    var expresionValida = "";
+    var bandera = false;
+    if (expresion.includes('+') || expresion.includes('-') || expresion.includes('*') || expresion.includes('/')) {
+        for (let i = 0; i < expresion.length; i++) {
+            if (expresion[i] != " " && (expresion[i + 1] != '+' && expresion[i + 1] != '-' && expresion[i + 1] != '*'
+                && expresion[i + 1] != '/')) {
+                termino = termino + expresion[i];
+            }
+            else {
+                expresionValida += termino;
+                if (termino != '+' && termino != '-' && termino != '*' && termino != '/') {
+                    switch (tipo) {
+                        case 'int':
+                            if (verificarEntero(termino, tipo) == false) {
+                                document.getElementById('salida').innerHTML = "El termino "
+                                    + termino + " no es tipo INT o no esta declarado.";
+                                bandera = false;
+                            }
+                            else {
+                                //realizar la operacion
+                                bandera = true;
+                            }
+                            break;
+                        case 'float':
+                            if (verificarFloat(termino, tipo) == false) {
+                                document.getElementById('salida').innerHTML = "El termino "
+                                    + termino + " no es tipo FLOAT o no esta declarado."
+                                bandera = false;
+                            }
+                            else {
+                                //realizar la operacion
+                                bandera = true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                termino = ""
+            }
 
-    for (let i = 0; i < tablaSimbolos.length; i++) {
-        if (tablaSimbolos[i] == cadena) {
-            tablaSimbolos[i] = texto;
+        }
+        if (bandera == true) {
+            //console.log(tablaSimbolos)
+            
+            for (let i = 0; i < tablaSimbolos.length; i++) {
+                var tem1 = tablaSimbolos[i].split(',');
+                var tem2 = cadena.split(',');
+                if (tem1[2] == tem2[2]) {
+                    tablaSimbolos[i] = texto;
+                    console.log(typeof texto)
+                    v.push(texto)
+
+                    //console.log(cadena, " ",texto)
+                    break;
+                }
+            }
+
+        }
+
+
+    }
+    else {
+        for (let i = 0; i < tablaSimbolos.length; i++) {
+            if (tablaSimbolos[i] == cadena) {
+                tablaSimbolos[i] = texto;
+                break;
+                //console.log(cadena, " ",texto)
+            }
         }
     }
     generarTabla()
+}
+
+verificarEntero = (termino, tipo) => {
+    if (termino.includes('.')) {
+        return false;
+    }
+    else {
+        if (parseInt(termino) > 0 || parseInt(termino) < 0) {
+            return true;
+        }
+        else { //verificar tipo en la tabal de simbolos
+            if (verificarEnTabla(termino) == true) {
+                var tabla;
+                var bandera = false;
+
+                for (let i = 0; i < tablaSimbolos.length; i++) {
+                    tabla = tablaSimbolos[i].split(',')
+                    if (tabla[2] == termino && tabla[0] == tipo) {
+                        bandera = true;
+                        valor = tabla[3];
+                        //console.log("el valor de ",termino, " es ",valor)
+                        break;
+                    }
+                    else {
+                        bandera = false;//en caso de que no este en la tabal de simbolos
+                    }
+                }
+                if (bandera == false) {
+                    return false;
+                }
+                else {
+                    return true; //en caso de que este en la tabal de simbolos
+                }
+            }
+            else {
+                return false;
+            }
+
+        }
+    }
+}
+verificarFloat = (termino, tipo) => {
+
+    if (parseFloat(termino) > 0 || parseFloat(termino) < 0) {
+        return true;
+    }
+    else { //verificar tipo en la tabal de simbolos
+        if (verificarEnTabla(termino) == true) {
+            var tabla;
+            var bandera = false;
+
+            for (let i = 0; i < tablaSimbolos.length; i++) {
+                tabla = tablaSimbolos[i].split(',')
+                if (tabla[2] == termino && tabla[0] == tipo) {
+                    bandera = true;
+                    break;
+                }
+                else {
+                    bandera = false;//en caso de que no este en la tabal de simbolos
+                }
+            }
+            if (bandera == false) {
+                return false;
+            }
+            else {
+                return true; //en caso de que este en la tabal de simbolos
+            }
+        }
+        else {
+            return false;
+        }
+
+    }
+}
+
+verificarEnTabla = (termino) => {
+    for (let i = 0; i < tablaSimbolos.length; i++) {
+        tabla = tablaSimbolos[i].split(',')
+        if (tabla[2] == termino) {
+            return true;
+        }
+
+    }
+    return false;
+}
+
+resolver = () =>{
+
+    for(let i = 0; i < v.length; i++){
+        console.log("aquiperro")
+        //resolverExpresion(expVal[i])
+    }
+        //console.log(v)
+
+}
+resolverExpresion = (expresion) => {
+    //console.log("entre: ", expresion)
+    expresion = expresion.trim()
+    var termino = ""
+    expresion = expresion + ";"
+    var valor;
+    var operacion = ""
+    for (let i = 0; i <= expresion.length; i++) {
+        if (expresion[i] != '+' && expresion[i] != '-' && expresion[i] != '*' && expresion[i] != '/'
+            && expresion[i] != ';') {
+            termino = termino + expresion[i];
+        }
+        else {
+            valor = obtenerValorTs(termino);
+            if (valor != false) {
+                valor = filtrarValor(valor)
+                //console.log("Termino ",termino, " vale: ",valor)
+                operacion = operacion + valor;
+            }
+            else{
+                operacion = operacion + termino;
+            }
+
+            if(expresion[i] == '+' || expresion[i] == '-' || expresion[i] == '*' || expresion[i] == '/'){
+                operacion = operacion + expresion[i];
+            }
+            termino = ""
+        }
+
+    }
+    console.log(operacion)
+}
+
+filtrarValor = (cadena) => {
+    var aux = "";
+    for (let i = 0; i < cadena.length; i++) {
+        if (cadena[i] != '|') {
+            aux += cadena[i];
+        }
+    }
+    return aux;
+}
+
+obtenerValorTs = (termino) => {
+    //console.log(tablaSimbolos)
+
+    for (let i = 0; i < tablaSimbolos.length; i++) {
+        tabla = tablaSimbolos[i].split(',')
+        if (tabla[2] == termino) {
+            //console.log("tERMINO: ", tabla[3])
+            return tabla[3];
+        }
+
+    }
+    return false;
 }
