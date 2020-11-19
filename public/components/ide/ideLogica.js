@@ -29,10 +29,8 @@ var filepathG = "";
 var editor
 var ts = [];
 var asig = [];
-var tablaSimbolos = [];
-var v = []
+var tablaSimbolos = []
 var exec2 = require('child_process').exec;
-
 window.onload = () => {
     editor = new Quill('#editor', {
         theme: 'snow'
@@ -212,14 +210,9 @@ lexico = (salida) => {
     tabla()
     generarTabla()
     datos()
-    resolver()
-    //console.log(tablaSimbolos)
-    console.log(v)
-
-
 }
 
-filtrar = () => {
+function filtrar ()  {
     var file = ""
     for (let i = 0; i < filepathG.length; i++) {
         if (filepathG[i].charCodeAt() == 92) {
@@ -233,7 +226,7 @@ filtrar = () => {
 
 }
 
-tabla = () => {
+function tabla ()  {
     const infoCodigo = editor.getText(0, editor.getLength());
     let palabra = ""
     //delimitador de linea
@@ -267,7 +260,7 @@ tabla = () => {
     }
 }
 
-recuperarLinea = (palabra, posicion, linea, valor) => {
+function recuperarLinea  (palabra, posicion, linea, valor)  {
     const infoCodigo = editor.getText(0, editor.getLength());
     ids = "";
     for (let i = posicion; i < infoCodigo.length; i++) {
@@ -284,7 +277,7 @@ recuperarLinea = (palabra, posicion, linea, valor) => {
     insertarTabla(palabra, ids, linea, valor)
 }
 
-insertarTabla = (palabra, ids, linea, valor) => {
+function insertarTabla  (palabra, ids, linea, valor)  {
 
     if (ids.length > 1) {
         identificadores = ids.split(',');
@@ -316,7 +309,7 @@ insertarTabla = (palabra, ids, linea, valor) => {
     }
 }
 
-guardarEnTabla = (texto) => {
+function guardarEnTabla  (texto)  {
     fs.appendFile('tablaSimbolos.txt', texto, (error) => {
         if (error) {
             throw error;
@@ -324,13 +317,13 @@ guardarEnTabla = (texto) => {
     })
 }
 
-duplicidad = (texto) => {
+function duplicidad  (texto)  {
     var id = texto.split('|');
     var aux;
     for (let i = 0; i < ts.length; i++) {
         aux = ts[i].split('|');
         if (aux[1] == id[1]) {
-            console.log('Ya esta en la lista')
+            console.log(id[1]+' Ya esta en la lista')
             return true;
         }
     }
@@ -339,7 +332,7 @@ duplicidad = (texto) => {
 
 }
 
-generarTabla = () => {
+function generarTabla  ()  {
     var tabla = [];
     var aux;
     for (let i = 0; i < tablaSimbolos.length; i++) {
@@ -373,7 +366,7 @@ generarTabla = () => {
 
 }
 
-datos = () => {
+function datos  ()  {
 
     const infoCodigo = editor.getText(0, editor.getLength());
     linea = 1;
@@ -401,7 +394,7 @@ datos = () => {
 
 }
 
-insertarAsignacion = (inicioLinea) => {
+function insertarAsignacion  (inicioLinea)  {
     const infoCodigo = editor.getText(0, editor.getLength());
     linea = "";
     for (let i = inicioLinea; i < infoCodigo.length; i++) {
@@ -416,7 +409,7 @@ insertarAsignacion = (inicioLinea) => {
     asig.push(linea);
 }
 
-verificarTipo = () => {
+function verificarTipo ()  {
     var asignacion;
     for (let i = 0; i < asig.length; i++) {
         asignacion = asig[i].split('=');
@@ -426,7 +419,7 @@ verificarTipo = () => {
 
     }
 }
-buscarEnTabla = (id, expresion) => {
+function buscarEnTabla  (id, expresion)  {
     fs.readFile('tablaSimbolos.txt', 'utf8', (error, datos) => {
         if (error) throw error;
         simbolos = datos.split('|')
@@ -485,7 +478,7 @@ buscarEnTabla = (id, expresion) => {
 
 }
 
-actualizarTabla = (id, expresion) => {
+function actualizarTabla  (id, expresion)  {
 
     fs.readFile('tablaSimbolos.txt', 'utf8', (error, datos) => {
         if (error) throw error;
@@ -503,13 +496,15 @@ actualizarTabla = (id, expresion) => {
         }
     });
 }
-actualizarArchivo = (cadena, texto) => {
+
+function actualizarArchivo  (cadena, texto) {
     var aux = texto.split(',');
     var expresion = aux[3] + " ";
     var termino = "";
     var tipo = aux[0];
-    var expresionValida = "";
+    var expresionValida = " ";
     var bandera = false;
+    var resultado;
     if (expresion.includes('+') || expresion.includes('-') || expresion.includes('*') || expresion.includes('/')) {
         for (let i = 0; i < expresion.length; i++) {
             if (expresion[i] != " " && (expresion[i + 1] != '+' && expresion[i + 1] != '-' && expresion[i + 1] != '*'
@@ -525,6 +520,8 @@ actualizarArchivo = (cadena, texto) => {
                                 document.getElementById('salida').innerHTML = "El termino "
                                     + termino + " no es tipo INT o no esta declarado.";
                                 bandera = false;
+                                return 0;
+
                             }
                             else {
                                 //realizar la operacion
@@ -536,6 +533,7 @@ actualizarArchivo = (cadena, texto) => {
                                 document.getElementById('salida').innerHTML = "El termino "
                                     + termino + " no es tipo FLOAT o no esta declarado."
                                 bandera = false;
+                                return 0;
                             }
                             else {
                                 //realizar la operacion
@@ -552,16 +550,16 @@ actualizarArchivo = (cadena, texto) => {
         }
         if (bandera == true) {
             //console.log(tablaSimbolos)
-            
             for (let i = 0; i < tablaSimbolos.length; i++) {
                 var tem1 = tablaSimbolos[i].split(',');
                 var tem2 = cadena.split(',');
                 if (tem1[2] == tem2[2]) {
                     tablaSimbolos[i] = texto;
-                    console.log(typeof texto)
-                    v.push(texto)
-
-                    //console.log(cadena, " ",texto)
+                    var aux = texto.split(',');
+                    resultado = resolverExpresion(expresionValida)
+                    aux[3] = resultado;
+                    tablaSimbolos[i] = (aux[0]+","+aux[1]+","+aux[2]+","+aux[3]).toString()
+                    tablaSimbolos[i]
                     break;
                 }
             }
@@ -582,7 +580,7 @@ actualizarArchivo = (cadena, texto) => {
     generarTabla()
 }
 
-verificarEntero = (termino, tipo) => {
+function verificarEntero  (termino, tipo)  {
     if (termino.includes('.')) {
         return false;
     }
@@ -621,7 +619,7 @@ verificarEntero = (termino, tipo) => {
         }
     }
 }
-verificarFloat = (termino, tipo) => {
+function verificarFloat (termino, tipo) {
 
     if (parseFloat(termino) > 0 || parseFloat(termino) < 0) {
         return true;
@@ -655,7 +653,7 @@ verificarFloat = (termino, tipo) => {
     }
 }
 
-verificarEnTabla = (termino) => {
+function verificarEnTabla (termino) {
     for (let i = 0; i < tablaSimbolos.length; i++) {
         tabla = tablaSimbolos[i].split(',')
         if (tabla[2] == termino) {
@@ -666,17 +664,7 @@ verificarEnTabla = (termino) => {
     return false;
 }
 
-resolver = () =>{
-
-    for(let i = 0; i < v.length; i++){
-        console.log("aquiperro")
-        //resolverExpresion(expVal[i])
-    }
-        //console.log(v)
-
-}
-resolverExpresion = (expresion) => {
-    //console.log("entre: ", expresion)
+function resolverExpresion (expresion) {
     expresion = expresion.trim()
     var termino = ""
     expresion = expresion + ";"
@@ -688,10 +676,11 @@ resolverExpresion = (expresion) => {
             termino = termino + expresion[i];
         }
         else {
+
             valor = obtenerValorTs(termino);
             if (valor != false) {
                 valor = filtrarValor(valor)
-                //console.log("Termino ",termino, " vale: ",valor)
+                console.log("Termino ",termino, " vale: ",valor)
                 operacion = operacion + valor;
             }
             else{
@@ -705,10 +694,12 @@ resolverExpresion = (expresion) => {
         }
 
     }
-    console.log(operacion)
+
+    return eval(operacion)
+
 }
 
-filtrarValor = (cadena) => {
+function filtrarValor (cadena)  {
     var aux = "";
     for (let i = 0; i < cadena.length; i++) {
         if (cadena[i] != '|') {
@@ -718,13 +709,11 @@ filtrarValor = (cadena) => {
     return aux;
 }
 
-obtenerValorTs = (termino) => {
-    //console.log(tablaSimbolos)
+function obtenerValorTs  (termino) {
 
     for (let i = 0; i < tablaSimbolos.length; i++) {
         tabla = tablaSimbolos[i].split(',')
         if (tabla[2] == termino) {
-            //console.log("tERMINO: ", tabla[3])
             return tabla[3];
         }
 
