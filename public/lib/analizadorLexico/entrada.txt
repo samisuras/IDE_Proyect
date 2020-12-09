@@ -1,8 +1,29 @@
 program {  
 	int x,y;
-	float z;
-	int x;
-	x=10;
-	y=juan;
+	int suma;
+	float z,q;
+	bool bandera;
+	x= 10;
+	y= 2;
+	suma= 10;
+	bandera= true;
+	z= 10.56;
+	suma= 5 + 8 + x - 10 * 5 / y;
+	z= 4 - 8 * 5.12;
+	if (x > 1) then {
+		x = x - 1;
+		while (y > 0){
+			y = y - 1;
+		}
+	}
+	else{
+		x = x + y;
+	} fi ; 
 }
  
+
+
+
+
+
+

@@ -22,6 +22,7 @@ palabrasReservadas
     .set("bool", "rgb(150, 230, 255)")
     .set("not", "rgb(255, 245, 255)")
     .set("and", "rgb(255, 255, 255)")
+    .set("then", "rgb(255, 150, 25)")
     .set("or", "rgb(0, 0, 0)");
 
 const dialog = appi.dialog;
@@ -112,6 +113,7 @@ pintar = () => {
         palabra += infoCodigo[i];
         //console.log(palabra);
     }
+
 }
 //pinta la palabra segun la posicion
 pinta = (posicion, palabra, color) => {
@@ -156,7 +158,26 @@ compilar = () => {
         //console.log(stdout)
         lexico(stdout)
         sintactico()
+        semantico()
     })
+}
+semantico = () => {
+    let comando = "go run ./public/lib/analizadorSemantico/main.go "
+    exec(comando, (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            alert(error.message)
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            alert(stderr)
+            return;
+        }
+        console.log(stdout)
+    })
+
+
 }
 sintactico = () => {
     var command = "start ./public/lib/analizadorLexico/analizador.exe " + filepathG + " > ./public/lib/analizadorLexico/salida.txt";
@@ -207,12 +228,42 @@ lexico = (salida) => {
     document.getElementById('comparadores').innerHTML = tokens.COMPARADORES
     document.getElementById('delimitadores').innerHTML = tokens.DELIMITADORES
     document.getElementById('asignacion').innerHTML = tokens.ASIGNACION
-    tabla()
+    var cadena = editor.getText(9, editor.getLength())
+    cadena = cadena.trim()
+    sentencias = ""
+    for(i=0;i<cadena.length;i++){
+        if(i == cadena.length-1){
+            break;
+        }
+        sentencias = sentencias + cadena [i]
+    }
+    fs.appendFile('sentencias.txt', sentencias, (error) => {
+        if (error) {
+            throw error;
+        }
+    })
+    tabla();
     generarTabla()
     datos()
+    complementar()
+}
+function complementar() {
+    var textoTs = ""
+    for (let i = 0; i < tablaSimbolos.length; i++) {
+        textoTs += tablaSimbolos[i];
+
+    }
+    fs.appendFile('ts2.txt', textoTs, (error) => {
+        if (error) {
+            throw error;
+        }
+    })
+
+
+
 }
 
-function filtrar ()  {
+function filtrar() {
     var file = ""
     for (let i = 0; i < filepathG.length; i++) {
         if (filepathG[i].charCodeAt() == 92) {
@@ -226,8 +277,9 @@ function filtrar ()  {
 
 }
 
-function tabla ()  {
+function tabla() {
     const infoCodigo = editor.getText(0, editor.getLength());
+
     let palabra = ""
     //delimitador de linea
     linea = 1;
@@ -235,6 +287,7 @@ function tabla ()  {
         if (err) throw err;
     });
     for (let i = 0; i < infoCodigo.length; i++) {
+
         if (infoCodigo[i] == " " || infoCodigo[i] == "\n" || infoCodigo[i] == "{" || infoCodigo[i] == "(" || infoCodigo[i] == ")" || infoCodigo[i] == "}") {
             //Checa si es nueva linea para incrementar contador
             if (infoCodigo[i] == "\n") {
@@ -258,9 +311,10 @@ function tabla ()  {
         }
         palabra += infoCodigo[i];
     }
+    //
 }
 
-function recuperarLinea  (palabra, posicion, linea, valor)  {
+function recuperarLinea(palabra, posicion, linea, valor) {
     const infoCodigo = editor.getText(0, editor.getLength());
     ids = "";
     for (let i = posicion; i < infoCodigo.length; i++) {
@@ -277,7 +331,7 @@ function recuperarLinea  (palabra, posicion, linea, valor)  {
     insertarTabla(palabra, ids, linea, valor)
 }
 
-function insertarTabla  (palabra, ids, linea, valor)  {
+function insertarTabla(palabra, ids, linea, valor) {
 
     if (ids.length > 1) {
         identificadores = ids.split(',');
@@ -309,7 +363,7 @@ function insertarTabla  (palabra, ids, linea, valor)  {
     }
 }
 
-function guardarEnTabla  (texto)  {
+function guardarEnTabla(texto) {
     fs.appendFile('tablaSimbolos.txt', texto, (error) => {
         if (error) {
             throw error;
@@ -317,13 +371,13 @@ function guardarEnTabla  (texto)  {
     })
 }
 
-function duplicidad  (texto)  {
+function duplicidad(texto) {
     var id = texto.split('|');
     var aux;
     for (let i = 0; i < ts.length; i++) {
         aux = ts[i].split('|');
         if (aux[1] == id[1]) {
-            console.log(id[1]+' Ya esta en la lista')
+            console.log(id[1] + ' Ya esta en la lista')
             return true;
         }
     }
@@ -332,7 +386,7 @@ function duplicidad  (texto)  {
 
 }
 
-function generarTabla  ()  {
+function generarTabla() {
     var tabla = [];
     var aux;
     for (let i = 0; i < tablaSimbolos.length; i++) {
@@ -366,7 +420,7 @@ function generarTabla  ()  {
 
 }
 
-function datos  ()  {
+function datos() {
 
     const infoCodigo = editor.getText(0, editor.getLength());
     linea = 1;
@@ -394,7 +448,7 @@ function datos  ()  {
 
 }
 
-function insertarAsignacion  (inicioLinea)  {
+function insertarAsignacion(inicioLinea) {
     const infoCodigo = editor.getText(0, editor.getLength());
     linea = "";
     for (let i = inicioLinea; i < infoCodigo.length; i++) {
@@ -409,7 +463,7 @@ function insertarAsignacion  (inicioLinea)  {
     asig.push(linea);
 }
 
-function verificarTipo ()  {
+function verificarTipo() {
     var asignacion;
     for (let i = 0; i < asig.length; i++) {
         asignacion = asig[i].split('=');
@@ -419,7 +473,7 @@ function verificarTipo ()  {
 
     }
 }
-function buscarEnTabla  (id, expresion)  {
+function buscarEnTabla(id, expresion) {
     fs.readFile('tablaSimbolos.txt', 'utf8', (error, datos) => {
         if (error) throw error;
         simbolos = datos.split('|')
@@ -446,7 +500,15 @@ function buscarEnTabla  (id, expresion)  {
                         actualizarTabla(id, expresion)
                     }
                     else {
-                        document.getElementById('salida').innerHTML = "Se esperaba un tipo int";
+                        if (expresion.includes('+') ||
+                            expresion.includes('-') ||
+                            expresion.includes('*') ||
+                            expresion.includes('/')) {
+
+                        }
+                        else {
+                            document.getElementById('salida').innerHTML = "Se esperaba un tipo int";
+                        }
                     }
                     break;
                 case 'float':
@@ -478,7 +540,7 @@ function buscarEnTabla  (id, expresion)  {
 
 }
 
-function actualizarTabla  (id, expresion)  {
+function actualizarTabla(id, expresion) {
 
     fs.readFile('tablaSimbolos.txt', 'utf8', (error, datos) => {
         if (error) throw error;
@@ -497,7 +559,7 @@ function actualizarTabla  (id, expresion)  {
     });
 }
 
-function actualizarArchivo  (cadena, texto) {
+function actualizarArchivo(cadena, texto) {
     var aux = texto.split(',');
     var expresion = aux[3] + " ";
     var termino = "";
@@ -557,9 +619,13 @@ function actualizarArchivo  (cadena, texto) {
                     tablaSimbolos[i] = texto;
                     var aux = texto.split(',');
                     resultado = resolverExpresion(expresionValida)
-                    aux[3] = resultado;
-                    tablaSimbolos[i] = (aux[0]+","+aux[1]+","+aux[2]+","+aux[3]).toString()
-                    tablaSimbolos[i]
+                    aux[3] = resultado.toString();
+                    tablaSimbolos[i] = (aux[0] + "," + aux[1] + "," + aux[2] + "," + aux[3]).toString()
+                    fs.appendFile('ts3.txt', (aux[0] + "," + aux[1] + "," + aux[2] + "," + aux[3] + '|'), (error) => {
+                        if (error) {
+                            throw error;
+                        }
+                    })
                     break;
                 }
             }
@@ -572,6 +638,12 @@ function actualizarArchivo  (cadena, texto) {
         for (let i = 0; i < tablaSimbolos.length; i++) {
             if (tablaSimbolos[i] == cadena) {
                 tablaSimbolos[i] = texto;
+                texto = texto + '|'
+                fs.appendFile('ts.txt', texto, (error) => {
+                    if (error) {
+                        throw error;
+                    }
+                })
                 break;
                 //console.log(cadena, " ",texto)
             }
@@ -580,7 +652,7 @@ function actualizarArchivo  (cadena, texto) {
     generarTabla()
 }
 
-function verificarEntero  (termino, tipo)  {
+function verificarEntero(termino, tipo) {
     if (termino.includes('.')) {
         return false;
     }
@@ -598,7 +670,7 @@ function verificarEntero  (termino, tipo)  {
                     if (tabla[2] == termino && tabla[0] == tipo) {
                         bandera = true;
                         valor = tabla[3];
-                        //console.log("el valor de ",termino, " es ",valor)
+                        console.log("el valor de ", termino, " es ", valor)
                         break;
                     }
                     else {
@@ -619,7 +691,7 @@ function verificarEntero  (termino, tipo)  {
         }
     }
 }
-function verificarFloat (termino, tipo) {
+function verificarFloat(termino, tipo) {
 
     if (parseFloat(termino) > 0 || parseFloat(termino) < 0) {
         return true;
@@ -653,7 +725,7 @@ function verificarFloat (termino, tipo) {
     }
 }
 
-function verificarEnTabla (termino) {
+function verificarEnTabla(termino) {
     for (let i = 0; i < tablaSimbolos.length; i++) {
         tabla = tablaSimbolos[i].split(',')
         if (tabla[2] == termino) {
@@ -664,7 +736,7 @@ function verificarEnTabla (termino) {
     return false;
 }
 
-function resolverExpresion (expresion) {
+function resolverExpresion(expresion) {
     expresion = expresion.trim()
     var termino = ""
     expresion = expresion + ";"
@@ -680,14 +752,13 @@ function resolverExpresion (expresion) {
             valor = obtenerValorTs(termino);
             if (valor != false) {
                 valor = filtrarValor(valor)
-                console.log("Termino ",termino, " vale: ",valor)
                 operacion = operacion + valor;
             }
-            else{
+            else {
                 operacion = operacion + termino;
             }
 
-            if(expresion[i] == '+' || expresion[i] == '-' || expresion[i] == '*' || expresion[i] == '/'){
+            if (expresion[i] == '+' || expresion[i] == '-' || expresion[i] == '*' || expresion[i] == '/') {
                 operacion = operacion + expresion[i];
             }
             termino = ""
@@ -699,7 +770,7 @@ function resolverExpresion (expresion) {
 
 }
 
-function filtrarValor (cadena)  {
+function filtrarValor(cadena) {
     var aux = "";
     for (let i = 0; i < cadena.length; i++) {
         if (cadena[i] != '|') {
@@ -709,7 +780,7 @@ function filtrarValor (cadena)  {
     return aux;
 }
 
-function obtenerValorTs  (termino) {
+function obtenerValorTs(termino) {
 
     for (let i = 0; i < tablaSimbolos.length; i++) {
         tabla = tablaSimbolos[i].split(',')

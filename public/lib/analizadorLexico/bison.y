@@ -49,8 +49,8 @@ lissentencias: lissentencias sentencias
                   ;
 sentencias: seleccion | iteracion | repeticion | sentread | sentwrite | bloque | asignacion 
                   ;
-seleccion: IF PARENTESISABRE bexpresion PARENTESISCIERRA THEN bloque FI
-                  | IF PARENTESISABRE bexpresion PARENTESISCIERRA THEN bloque ELSE bloque
+seleccion: IF PARENTESISABRE bexpresion PARENTESISCIERRA THEN bloque FI PUNTOYCOMA
+                  | IF PARENTESISABRE bexpresion PARENTESISCIERRA THEN bloque ELSE bloque FI PUNTOYCOMA
                   ;
 iteracion: WHILE PARENTESISABRE bexpresion PARENTESISCIERRA bloque
                   ;
