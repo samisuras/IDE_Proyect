@@ -119,14 +119,14 @@ func crearTs() {
 	i := 0
 	for i < indexTs {
 		simboloTs := strings.Split(ts[i], ",")
-		tablaSimbolos[indexTablaSimbolos] = simboloTs[0] + "," + simboloTs[1] + "," + simboloTs[2] + "," + simboloTs[3]
+		tablaSimbolos[indexTablaSimbolos] = simboloTs[0] + "," + simboloTs[1] + "," + simboloTs[2] + "," + simboloTs[3] + "," + "`" + simboloTs[2] + "`"
 		indexTablaSimbolos++
 		i++
 	}
 	j := 0
 	for j < indexTs2 {
 		simboloTs2 := strings.Split(ts2[j], ",")
-		agregarTs(simboloTs2[0]+","+simboloTs2[1]+","+simboloTs2[2]+","+simboloTs2[3], simboloTs2[2])
+		agregarTs(simboloTs2[0]+","+simboloTs2[1]+","+simboloTs2[2]+","+simboloTs2[3]+","+"`"+simboloTs2[2]+"`", simboloTs2[2])
 		j++
 	}
 }
@@ -513,6 +513,18 @@ func existeArchivo(file string) bool {
 	return true
 
 }
+func generarSalidas() string {
+	i := 0
+	salidas := ""
+	flecha := `"=>"`
+	for i < indexTablaSimbolos {
+		simboloTs := strings.Split(tablaSimbolos[i], ",")
+		salidas = salidas + "fmt.Println(" + string(simboloTs[4]) + "," + flecha + "," + simboloTs[2] + ")\n"
+		i = i + 1
+
+	}
+	return salidas
+}
 func main() {
 
 	modificadas := extraerModificadas()
@@ -535,26 +547,18 @@ func main() {
 	lineas := extraerLineas(tam, "sentencias.txt")
 	dec := declaraciones(lineas, tam)
 	eliminarArchivo("sentencias.txt")
-
+	salidas := generarSalidas()
 	//fmt.Println(dec)
 	cmdString := `
 	package main
 	import (
 		"fmt"
 	)
-	func main() {` + "\n" + dec + `
-
-		fmt.Println(x)
-		fmt.Println(y)
-		fmt.Println(z)
-		fmt.Println(suma)
-
-	}`
+	func main() {` + "\n" + dec + salidas + `}`
 	//fmt.Println(cmdString)
 	output, err := golpal.New().ExecuteRaw(cmdString)
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(output)
-
 }

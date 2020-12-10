@@ -175,6 +175,7 @@ semantico = () => {
             return;
         }
         console.log(stdout)
+        document.getElementById('salida').innerHTML = stdout
     })
 
 
@@ -534,7 +535,10 @@ function buscarEnTabla(id, expresion) {
         }
         else {
             bandera = false;
-            document.getElementById('salida').innerHTML = "El identificador " + id + " no se ha declarado"
+            
+            //document.getElementById('salida').innerHTML = "El identificador " + id + " no se ha declarado"
+
+            
         }
     });
 

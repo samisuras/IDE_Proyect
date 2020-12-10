@@ -1,1 +1,1 @@
-int,2,y,0|int,2,x,0|int,2,z,0|int,3,suma,0|
+int,2,x,0|int,2,y,0|int,2,z,0|int,3,suma,0|
