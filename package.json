@@ -12,7 +12,7 @@
   "dependencies": {
     "d3-collection": "^1.0.7",
     "dawn.js": "^0.1.1",
-    "electron": "^4.0.0",
+    "electron": "^13.6.6",
     "electron-reload": "^1.4.0",
     "lex-bnf": "^0.3.2",
     "line-reader": "^0.4.0",
